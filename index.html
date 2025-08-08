@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoalCraft AI - Transform Daily Actions Into Meaningful Progress</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen">
+        <div class="welcome-content">
+            <div class="welcome-hero">
+                <h1 class="welcome-title">GoalCraft AI</h1>
+                <p class="welcome-subtitle">AI-powered goal alignment that transforms daily actions into meaningful progress toward your dreams</p>
+            </div>
+            <div class="welcome-features">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>AI-Powered Guidance</h3>
+                    <p>Smart "Next Best Action" recommendations based on your behavior and goals</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>SMART • OKR • JTBD</h3>
+                    <p>Multiple goal frameworks to structure your most important objectives</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💚</div>
+                    <h3>Holistic Wellbeing</h3>
+                    <p>Balance productivity with wellness through reflection and mindful progress</p>
+                </div>
+            </div>
+            <div class="welcome-actions">
+                <button class="btn btn--primary btn--lg" onclick="startApp()">Get Started</button>
+                <button class="btn btn--outline btn--lg" onclick="showDemo()">Take Demo Tour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app-container" class="app-container hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="user-greeting">
+                    <h2 id="greeting-text">Good evening, Alex! 🌆</h2>
+                    <p class="streak-info">🔥 <span id="streak-count">14</span> day streak • Level <span id="user-level">8</span></p>
+                </div>
+                <div class="user-profile">
+                    <div class="points-badge"><span id="user-points">3,240</span> XP</div>
+                    <div class="user-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b35cd0ac?w=150&h=150&fit=crop&crop=face&auto=format" alt="Alex" />
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Daily Overview Section -->
+            <section id="overview-section" class="content-section">
+                <div class="daily-motivation">
+                    <div class="quote-card">
+                        <p id="daily-quote">"Your consistency is building the foundation for extraordinary achievements."</p>
+                        <div class="quote-author">— GoalCraft AI</div>
+                    </div>
+                </div>
+
+                <!-- AI Insights Panel -->
+                <div class="ai-insights-section">
+                    <div class="section-header">
+                        <h3>🧠 AI Insights</h3>
+                        <button class="btn btn--sm btn--secondary" onclick="app.generateInsights()">🔄 Refresh</button>
+                    </div>
+                    <div class="insights-grid">
+                        <div class="insight-card peak-time">
+                            <div class="insight-icon">⚡</div>
+                            <div class="insight-content">
+                                <span class="insight-label">Peak Energy Time</span>
+                                <span class="insight-value">9:00-11:00 AM</span>
+                                <span class="insight-tip">Perfect for creative work</span>
+                            </div>
+                        </div>
+                        <div class="insight-card productivity">
+                            <div class="insight-icon">📈</div>
+                            <div class="insight-content">
+                                <span class="insight-label">Today's Momentum</span>
+                                <span class="insight-value">High (86%)</span>
+                                <span class="insight-tip">Great day to tackle priorities</span>
+                            </div>
+                        </div>
+                        <div class="insight-card balance">
+                            <div class="insight-icon">⚖️</div>
+                            <div class="insight-content">
+                                <span class="insight-label">Work-Life Balance</span>
+                                <span class="insight-value">Good (7/10)</span>
+                                <span class="insight-tip">Maintain current rhythm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Best Actions Section -->
+                <div class="next-actions-section">
+                    <div class="section-header">
+                        <h3>🎯 Next Best Actions</h3>
+                        <button class="btn btn--sm btn--secondary" onclick="app.refreshRecommendations()">🔄 Refresh AI</button>
+                    </div>
+                    <div id="next-actions-list" class="next-actions-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Today's Progress -->
+                <div class="today-progress">
+                    <h3>Today's Progress</h3>
+                    <div class="progress-cards">
+                        <div class="progress-card" onclick="app.showTasksOverview()">
+                            <div class="progress-icon">✅</div>
+                            <div class="progress-info">
+                                <span class="progress-number" id="tasks-completed">1/3</span>
+                                <span class="progress-label">Tasks Done</span>
+                            </div>
+                        </div>
+                        <div class="progress-card" onclick="app.navigateToSection('goals')">
+                            <div class="progress-icon">🎯</div>
+                            <div class="progress-info">
+                                <span class="progress-number" id="goals-progress">65%</span>
+                                <span class="progress-label">Goals Progress</span>
+                            </div>
+                        </div>
+                        <div class="progress-card" onclick="app.showHabitsOverview()">
+                            <div class="progress-icon">🏃</div>
+                            <div class="progress-info">
+                                <span class="progress-number" id="habits-completed">2/3</span>
+                                <span class="progress-label">Habits Done</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Tasks -->
+                <div class="tasks-section">
+                    <div class="section-header">
+                        <h3>Today's Tasks</h3>
+                        <div class="header-actions">
+                            <select id="task-filter" class="form-control" onchange="app.filterTasks(this.value)">
+                                <option value="all">All Tasks</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="high">High Priority</option>
+                            </select>
+                            <button class="btn btn--sm btn--primary" onclick="app.showAddTask()">+ Add Task</button>
+                        </div>
+                    </div>
+                    <div id="tasks-list" class="tasks-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Habits Tracker -->
+                <div class="habits-section">
+                    <h3>Daily Habits</h3>
+                    <div id="habits-list" class="habits-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Goals Section -->
+            <section id="goals-section" class="content-section hidden">
+                <div class="section-header">
+                    <h2>Your Goals</h2>
+                    <button class="btn btn--primary" onclick="app.showGoalWizard()">+ New Goal</button>
+                </div>
+                <div class="goals-filter">
+                    <button class="filter-btn active" data-filter="all" onclick="app.filterGoals('all')">All</button>
+                    <button class="filter-btn" data-filter="Creative" onclick="app.filterGoals('Creative')">Creative</button>
+                    <button class="filter-btn" data-filter="Professional" onclick="app.filterGoals('Professional')">Professional</button>
+                    <button class="filter-btn" data-filter="Wellness" onclick="app.filterGoals('Wellness')">Wellness</button>
+                </div>
+                <div id="goals-list" class="goals-list">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section id="progress-section" class="content-section hidden">
+                <h2>Progress Analytics</h2>
+                <div class="analytics-grid">
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <h3>Weekly Progress</h3>
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <h3>Goal Categories</h3>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="wellbeing-metrics">
+                        <h3>Wellbeing Dashboard</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-item">
+                                <span class="metric-label">Energy</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: 70%"></div>
+                                </div>
+                                <span class="metric-value">7/10</span>
+                                <button class="metric-update" onclick="app.updateMetric('energy')">Update</button>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Mood</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: 80%"></div>
+                                </div>
+                                <span class="metric-value">8/10</span>
+                                <button class="metric-update" onclick="app.updateMetric('mood')">Update</button>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Stress</span>
+                                <div class="metric-bar stress">
+                                    <div class="metric-fill" style="width: 30%"></div>
+                                </div>
+                                <span class="metric-value">3/10</span>
+                                <button class="metric-update" onclick="app.updateMetric('stress')">Update</button>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Balance</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: 70%"></div>
+                                </div>
+                                <span class="metric-value">7/10</span>
+                                <button class="metric-update" onclick="app.updateMetric('balance')">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="achievements-section">
+                        <h3>Recent Achievements</h3>
+                        <div id="achievements-list" class="achievements-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Section -->
+            <section id="community-section" class="content-section hidden">
+                <h2>Community & Accountability</h2>
+                <div class="community-tabs">
+                    <button class="tab-btn active" onclick="app.showCommunityTab('connections')">Connections</button>
+                    <button class="tab-btn" onclick="app.showCommunityTab('achievements')">Shared Achievements</button>
+                    <button class="tab-btn" onclick="app.showCommunityTab('challenges')">Group Challenges</button>
+                </div>
+                <div id="community-content" class="community-content">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Reflection Section -->
+            <section id="reflection-section" class="content-section hidden">
+                <h2>Weekly Reflection</h2>
+                <div class="reflection-content">
+                    <div class="reflection-prompt">
+                        <h3>How was your week?</h3>
+                        <p>Take a moment to reflect on your progress, challenges, and intentions for the week ahead.</p>
+                    </div>
+                    <div class="reflection-questions">
+                        <div class="question-card">
+                            <label>What were your biggest wins this week?</label>
+                            <textarea id="wins-text" class="form-control" placeholder="Celebrate your achievements, progress, and moments of pride..."></textarea>
+                        </div>
+                        <div class="question-card">
+                            <label>What challenges did you face and how did you handle them?</label>
+                            <textarea id="challenges-text" class="form-control" placeholder="Reflect on obstacles, lessons learned, and growth opportunities..."></textarea>
+                        </div>
+                        <div class="question-card">
+                            <label>What would you like to focus on next week?</label>
+                            <textarea id="focus-text" class="form-control" placeholder="Set intentions, priorities, and commitments for the upcoming week..."></textarea>
+                        </div>
+                        <div class="question-card">
+                            <label>How are you feeling about your overall progress toward your goals?</label>
+                            <textarea id="progress-reflection" class="form-control" placeholder="Consider alignment between daily actions and long-term aspirations..."></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn--primary btn--full-width" onclick="app.saveReflection()">Save Reflection</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-section="overview" onclick="app.navigateToSection('overview')">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </button>
+            <button class="nav-item" data-section="goals" onclick="app.navigateToSection('goals')">
+                <span class="nav-icon">🎯</span>
+                <span class="nav-label">Goals</span>
+            </button>
+            <button class="nav-item" data-section="progress" onclick="app.navigateToSection('progress')">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Progress</span>
+            </button>
+            <button class="nav-item" data-section="community" onclick="app.navigateToSection('community')">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">Community</span>
+            </button>
+            <button class="nav-item" data-section="reflection" onclick="app.navigateToSection('reflection')">
+                <span class="nav-icon">✨</span>
+                <span class="nav-label">Reflect</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Goal Wizard Modal -->
+    <div id="goal-wizard-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Goal</h3>
+                <button class="modal-close" onclick="app.hideModal('goal-wizard-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="goal-form" onsubmit="app.createGoal(event)">
+                    <div class="goal-framework-selector">
+                        <h4>Choose Framework</h4>
+                        <div class="framework-options">
+                            <label class="framework-option">
+                                <input type="radio" name="framework" value="SMART" checked>
+                                <div class="option-content">
+                                    <strong>SMART Goals</strong>
+                                    <p>Specific, Measurable, Achievable, Relevant, Time-bound</p>
+                                </div>
+                            </label>
+                            <label class="framework-option">
+                                <input type="radio" name="framework" value="OKR">
+                                <div class="option-content">
+                                    <strong>OKR Framework</strong>
+                                    <p>Objectives & Key Results for ambitious, measurable targets</p>
+                                </div>
+                            </label>
+                            <label class="framework-option">
+                                <input type="radio" name="framework" value="JTBD">
+                                <div class="option-content">
+                                    <strong>Jobs-to-be-Done</strong>
+                                    <p>Outcome-focused approach for meaningful life results</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Goal Title</label>
+                        <input type="text" id="goal-title" class="form-control" placeholder="e.g., Master advanced data visualization" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select id="goal-category" class="form-control" required>
+                            <option value="">Select category...</option>
+                            <option value="Creative">Creative</option>
+                            <option value="Professional">Professional</option>
+                            <option value="Wellness">Wellness</option>
+                            <option value="Personal Development">Personal Development</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="goal-description" class="form-control" placeholder="Describe your goal and what success looks like..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Target Date</label>
+                        <input type="date" id="goal-date" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" onclick="app.hideModal('goal-wizard-modal')">Cancel</button>
+                <button class="btn btn--primary" onclick="document.getElementById('goal-form').requestSubmit()">Create Goal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="add-task-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Task</h3>
+                <button class="modal-close" onclick="app.hideModal('add-task-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="task-form" onsubmit="app.createTask(event)">
+                    <div class="form-group">
+                        <label class="form-label">Task Title</label>
+                        <input type="text" id="task-title" class="form-control" placeholder="What needs to be accomplished?" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select id="task-category" class="form-control" required>
+                            <option value="">Select category...</option>
+                            <option value="Creative">Creative</option>
+                            <option value="Professional">Professional</option>
+                            <option value="Wellness">Wellness</option>
+                            <option value="Personal Development">Personal Development</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Priority</label>
+                        <select id="task-priority" class="form-control" required>
+                            <option value="">Select priority...</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estimated Time</label>
+                        <select id="task-time" class="form-control" required>
+                            <option value="">Select time...</option>
+                            <option value="15">15 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="60">1 hour</option>
+                            <option value="120">2 hours</option>
+                            <option value="240">Half day</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Link to Goal (Optional)</label>
+                        <select id="task-goal" class="form-control">
+                            <option value="">Select goal...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Due Date (Optional)</label>
+                        <input type="date" id="task-due-date" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" onclick="app.hideModal('add-task-modal')">Cancel</button>
+                <button class="btn btn--primary" onclick="document.getElementById('task-form').requestSubmit()">Add Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metric Update Modal -->
+    <div id="metric-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="metric-modal-title">Update Metric</h3>
+                <button class="modal-close" onclick="app.hideModal('metric-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" id="metric-label">How are you feeling?</label>
+                    <div class="metric-slider-container">
+                        <input type="range" id="metric-slider" class="metric-slider" min="1" max="10" value="5">
+                        <div class="slider-labels">
+                            <span>1</span>
+                            <span id="slider-value">5</span>
+                            <span>10</span>
+                        </div>
+                    </div>
+                    <div class="metric-description" id="metric-description">
+                        Rate your current level
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" onclick="app.hideModal('metric-modal')">Cancel</button>
+                <button class="btn btn--primary" onclick="app.saveMetric()">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Celebration Modal -->
+    <div id="celebration-modal" class="modal celebration-modal hidden">
+        <div class="modal-content celebration-content">
+            <div class="celebration-animation">🎉</div>
+            <h3 id="celebration-title">Outstanding Work!</h3>
+            <p id="celebration-message">You're making excellent progress toward your goals!</p>
+            <div class="celebration-reward">
+                <span id="celebration-points">+50 XP earned!</span>
+            </div>
+            <button class="btn btn--primary" onclick="app.hideModal('celebration-modal')">Keep Going!</button>
+        </div>
+    </div>
+
+    <!-- AI Explanation Modal -->
+    <div id="ai-explanation-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🧠 Why This Recommendation?</h3>
+                <button class="modal-close" onclick="app.hideModal('ai-explanation-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="ai-explanation-content" class="ai-explanation">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" onclick="app.hideModal('ai-explanation-modal')">Got it!</button>
+                <button class="btn btn--primary" id="accept-recommendation" onclick="app.acceptRecommendation()">Accept & Execute</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
